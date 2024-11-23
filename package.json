@@ -1,0 +1,25 @@
+{
+  "name": "desafioshopper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "install": "cd backend && npm install && cd ../frontend && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/leandrojpcarvalho/desafioShopper.git"
+  },
+  "keywords": [
+    "backend",
+    "google",
+    "maps"
+  ],
+  "author": "Leandro Carvalho",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/leandrojpcarvalho/desafioShopper/issues"
+  },
+  "homepage": "https://github.com/leandrojpcarvalho/desafioShopper#readme",
+  "description": ""
+}

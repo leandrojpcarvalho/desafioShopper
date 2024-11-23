@@ -1,0 +1,33 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "npx tsc && mocha ./dist/test/**/*.test.js",
+    "lint": "tslint --project tsconfig.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "http-status-code": "^2.1.0",
+    "joi": "^17.13.3",
+    "mysql2": "^3.11.4"
+  },
+  "devDependencies": {
+    "@types/chai": "^5.0.1",
+    "@types/express": "^5.0.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.9.3",
+    "chai": "^5.1.2",
+    "mocha": "^10.8.2",
+    "sinon": "^19.0.2",
+    "sinon-chai": "^4.0.0",
+    "ts-node-dev": "^2.0.0",
+    "tslint": "^5.20.1",
+    "typescript": "^5.6.3"
+  }
+}
