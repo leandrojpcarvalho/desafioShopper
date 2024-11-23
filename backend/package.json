@@ -1,11 +1,11 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
-  "type": "module",
+  "main": "server.js",
   "scripts": {
     "test": "npx tsc && mocha ./dist/test/**/*.test.js",
-    "lint": "tslint --project tsconfig.json"
+    "lint": "tslint --project tsconfig.json",
+    "start": "tsnd --watch \"./src/**\" --transpile-only ./src/server.ts"
   },
   "author": "",
   "license": "ISC",
