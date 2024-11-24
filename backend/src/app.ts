@@ -1,6 +1,7 @@
 import express, { Request, RequestHandler, Response } from 'express';
 import { Route } from './types';
 import MiddlewareFactory from './layers/middleware/Middleware';
+import ModelSql from './db/model';
 
 export default class Application {
     #app: express.Express;
@@ -29,10 +30,16 @@ export default class Application {
         this.#app.use(accessControl);
     }
 
-    start(port: number): void {
+    start(port: number, dataBase: 'start' | 'clear' = 'start'): void {
         this.#app.listen(port, () => {
             console.log(`Server is running on port ${port}`);
         });
+        if (dataBase === 'start') {
+            ModelSql.createDatabase();
+        } else {
+            ModelSql.dropTables();
+            ModelSql.createDatabase();
+        }
 
     }
 }
