@@ -1,5 +1,4 @@
-import *  as Joi from 'joi';
-import Estimate from '../../../interface/estimate.interface';
+import Joi from 'joi';
 import { EstimateRequest } from '../../../types';
 
 const schemaEstimate = Joi.object<EstimateRequest, true, EstimateRequest>({
