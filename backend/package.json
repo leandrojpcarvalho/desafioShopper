@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "npx tsc && mocha ./dist/test/**/*.test.js",
+    "test": "mocha",
     "lint": "tslint --project tsconfig.json",
+    "dev": "npx nodemon ./src/server.ts",
     "start": "tsnd --watch \"./src/**\" --transpile-only ./src/server.ts"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/chai-http": "^3.0.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "http-status-code": "^2.1.0",
@@ -22,12 +24,17 @@
     "@types/express": "^5.0.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.9.3",
-    "chai": "^5.1.2",
+    "@types/sinon": "^17.0.3",
+    "chai": "^4.4.1",
+    "chai-http": "^5.1.1",
     "mocha": "^10.8.2",
+    "nodemon": "^3.1.7",
     "sinon": "^19.0.2",
     "sinon-chai": "^4.0.0",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tslint": "^5.20.1",
-    "typescript": "^5.6.3"
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
   }
 }
