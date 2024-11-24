@@ -5,6 +5,7 @@ import ModelSql from '../../src/db/model';
 import { affectedRows, mockById, mockModelSql } from '../mocks';
 import mySqlConnection from '../../src/db/config';
 import ICustomer from '../../src/interface/users.interface';
+import Utils from '../../src/utils';
 
 
 const model = new ModelSql<ICustomer>();
@@ -46,4 +47,10 @@ describe('testa a modelSql', () => {
         const response = await model.delete(1, 'customers');
         expect(response).to.be.deep.equal(true);
     });
+    it('testa se ao passar dados corretos a model executa uma query customizada', async function () {
+        sinon.stub(Utils, 'readSqlFile').resolves('SELECT * FROM customers');
+        sinon.stub(mySqlConnection, 'query').resolves([mockModelSql, []]);
+        const response = await model.customQuery<ICustomer>([]);
+        expect(response).to.be.deep.equal(mockModelSql);
+    })
 });
