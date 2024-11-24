@@ -12,27 +12,33 @@ services:
     depends_on:
       - backend
   backend:
+    command: dev
     environment:
       - "PORT=8080"
       - "DB_HOST=database"
       - "DB_USER=root"
       - "DB_PASSWORD=password"
-      - "DB_NAME=mydb"
+      - "DB_NAME=mobee"
     env_file:
       - .env
     build: ./backend
     ports:
       - "8080:8080"
     volumes:
-      - ./backend:/app
+      - ./backend:/backend
     depends_on:
-      - database
+      database:
+        condition: service_healthy
   database:
     image: mysql:8.0.32
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: mydb
+      MYSQL_DATABASE: mobee
     ports:
       - "3306:3306"
     volumes:
       - ./database:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 10s
+      retries: 5

@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "install": "cd backend && npm install && cd ../frontend && npm install"
+    "install": "cd backend && npm install && cd ../frontend && npm install",
+    "start": "docker-compose up --build -d"
   },
   "repository": {
     "type": "git",
