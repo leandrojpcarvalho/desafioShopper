@@ -6,5 +6,5 @@ export default interface IModel<T> {
     create(data: T, table: keyof IDatabase): Promise<T>;
     update(id: number, data: T, table: keyof IDatabase): Promise<T | null>;
     delete(id: number, table: keyof IDatabase): Promise<boolean>;
-    customQuery<R>(query: string): Promise<R[]>;
+    customQuery<R>(path: string[]): Promise<R[]>;
 }

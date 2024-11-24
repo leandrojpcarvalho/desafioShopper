@@ -1,4 +1,4 @@
-import { FieldPacket, Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";
+import { FieldPacket, Pool, QueryResult, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import IModel from "../interface/model.interface";
 import mySqlConnection from "./config";
 import Utils from "../utils";
@@ -29,8 +29,10 @@ export default class ModelSql<T> implements IModel<T> {
         return null;
     }
 
-    public async customQuery<R>(query: string): Promise<R[]> {
-        return (await this.#model.query(query))[0] as R[];
+    public async customQuery<R>(path: string[]): Promise<R[]> {
+        const query = await Utils.readSqlFile(path, false);
+        const [data]: [QueryResult, FieldPacket[]] = await this.#model.query(query);
+        return data as R[];
     }
 
     public async delete(id: number, table: keyof IDatabase): Promise<boolean> {
@@ -44,8 +46,7 @@ export default class ModelSql<T> implements IModel<T> {
 
     public static async createDatabase(): Promise<void> {
         const connection = await mySqlConnection.getConnection();
-        const creation = Utils.readSqlFile(['..', 'db', './SQL', 'create-database.sql']);
-        this.#runQueries(creation);
+        this.#runQueries(['..', 'db', './SQL', 'create-database.sql']);
         const data = (await connection.query('select * from customers'))[0] as [];
         if (data.length === 0) {
             await this.#insertData();
@@ -53,16 +54,15 @@ export default class ModelSql<T> implements IModel<T> {
     }
 
     public static async dropTables(): Promise<void> {
-        const queries = Utils.readSqlFile(['..', 'db', './SQL', 'drop-tables.sql']);
-        this.#runQueries(queries);
+        this.#runQueries(['..', 'db', './SQL', 'drop-tables.sql']);
     }
 
     static async #insertData(): Promise<void> {
-        const data = Utils.readSqlFile(['..', 'db', './SQL', 'seeds.sql']);
-        this.#runQueries(data);
+        this.#runQueries(['..', 'db', './SQL', 'seeds.sql']);
     }
 
-    static async #runQueries(queries: string[]): Promise<void> {
+    static async #runQueries(path: string[]): Promise<void> {
+        const queries = await Utils.readSqlFile(path, true);
         const connection = await mySqlConnection.getConnection();
         for (const query of queries) {
             if (query.trim() !== '') {
