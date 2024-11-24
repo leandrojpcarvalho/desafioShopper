@@ -1,8 +1,9 @@
-import express from 'express';
+import express, { Request, RequestHandler, Response } from 'express';
 import { Route } from './types';
+import MiddlewareFactory from './layers/middleware/Middleware';
 
 export default class Application {
-    #app: express.Application;
+    #app: express.Express;
 
     constructor(routes: Route, app = express()) {
         this.#app = app;
@@ -14,6 +15,7 @@ export default class Application {
         routes.forEach(route => {
             this.#app.use(route);
         });
+        this.#app.use(MiddlewareFactory.errorHandler);
     }
 
     #config(): void {
