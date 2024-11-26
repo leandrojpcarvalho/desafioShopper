@@ -1,9 +1,45 @@
-import IDriver from "./divers.interface";
-import IRide from "./ride.interface";
-import ICustomer from "./users.interface";
-
 export interface IDatabase {
-    drivers: IDriver[];
-    customers: ICustomer[];
-    rides: IRide[];
+    drivers: IDriverDB[];
+    customers: ICustomerDB[];
+    rides: IRideDB[];
+    reviews: IReviewDB[];
+}
+
+export interface IDriverDB {
+    id: number;
+    name: string;
+    description: string;
+    vehicle: string;
+    tax: number;
+    min_order: number;
+}
+
+export interface IDriverCalculate extends IDriverDB {
+    reviews: IReviewDB[];
+    value: number;
+}
+
+export interface IRideDB {
+    id: number;
+    customer_id: number;
+    driver_id: number;
+    origin: string;
+    destination: string;
+    distance: number;
+    duration: string;
+    value: number;
+    date: Date;
+}
+
+export interface ICustomerDB {
+    id: number;
+}
+
+export interface IReviewDB {
+    id: number;
+    ride_id: number;
+    driver_id: number;
+    customer_id: number;
+    comment: string;
+    rating: number;
 }
