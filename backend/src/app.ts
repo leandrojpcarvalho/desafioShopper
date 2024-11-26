@@ -1,18 +1,18 @@
-import express, { Request, RequestHandler, Response } from 'express';
-import { Route } from './types';
+import express from 'express';
 import MiddlewareFactory from './layers/middleware/Middleware';
-import ModelSql from './db/model';
+import { Routes } from './utils/types';
+import DBManagenament from './db/config';
 
 export default class Application {
     #app: express.Express;
 
-    constructor(routes: Route, app = express()) {
+    constructor(routes: Routes, app = express()) {
         this.#app = app;
         this.#config();
         this.#setRoutes(routes);
     }
 
-    #setRoutes(routes: Route): void {
+    #setRoutes(routes: Routes): void {
         routes.forEach(route => {
             this.#app.use(route);
         });
@@ -35,10 +35,10 @@ export default class Application {
             console.log(`Server is running on port ${port}`);
         });
         if (dataBase === 'start') {
-            ModelSql.createDatabase();
+            DBManagenament.createDatabase();
         } else {
-            ModelSql.dropTables();
-            ModelSql.createDatabase();
+            DBManagenament.dropTables();
+            DBManagenament.createDatabase();
         }
 
     }
