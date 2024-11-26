@@ -9,7 +9,7 @@ export default class Utils {
     public static async readSqlFile(path: string[], splited?: boolean): Promise<string[] | string>;
     public static async readSqlFile(path: string[], splited: boolean = true): Promise<string[] | string> {
         try {
-            const data = await readFile(join(__dirname, ...path), 'utf-8')
+            const data = await readFile(join(__dirname, '../db/SQL', ...path), 'utf-8')
             return splited ? data.split(';') : data;
         } catch (error: any) {
             throw new CustomError('INTERNAL_SERVER_ERROR', error.message);
