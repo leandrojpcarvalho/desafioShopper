@@ -1,13 +1,15 @@
-import { FieldPacket, Pool, QueryResult, ResultSetHeader, RowDataPacket } from "mysql2/promise";
+import { FieldPacket, OkPacketParams, Pool, QueryResult, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 import IModel from "../interface/model.interface";
-import mySqlConnection from "./config";
 import Utils from "../utils";
 import { IDatabase } from "../interface/database.interface";
+import { CustomQueryOptions } from "../utils/types";
+import DBManagenament from "./config";
+import CustomError from "../entities/CustomError";
 
-export default class ModelSql<T> implements IModel<T> {
+export default class ModelSql<T extends Object> implements IModel<T> {
     #model: Pool;
 
-    constructor(model: Pool = mySqlConnection) {
+    constructor(model: Pool = DBManagenament.getConnection()) {
         this.#model = model;
     }
 
@@ -16,9 +18,24 @@ export default class ModelSql<T> implements IModel<T> {
         return data ? data as T : null;
     }
 
-    public async create(data: T, table: keyof IDatabase): Promise<T> {
-        const [[newData]]: [RowDataPacket[], FieldPacket[]] = await this.#model.query(`INSERT INTO ${table} SET ?`, [data]);
-        return newData as T;
+    public async create(data: T, table: keyof IDatabase) {
+        try {
+            const key = Object.keys(data);
+            const values = Object.values(data);
+            const query = `
+                INSERT INTO ${table} (${key.join(',')}) 
+                VALUES(${key.map(value => "?").join(",")})
+            `;
+            const [{ insertId }]: [ResultSetHeader, FieldPacket[]] = await this.#model.query(query, values);
+            if (!insertId) {
+                throw new CustomError('CREATION_FAILED', 'model.create');
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                throw new CustomError('INTERNAL_SERVER_ERROR', error.message);
+            }
+        }
+        return true;
     }
 
     public async update(id: number, data: T, table: keyof IDatabase): Promise<T | null> {
@@ -29,9 +46,9 @@ export default class ModelSql<T> implements IModel<T> {
         return null;
     }
 
-    public async customQuery<R>(path: string[]): Promise<R[]> {
-        const query = await Utils.readSqlFile(path, false);
-        const [data]: [QueryResult, FieldPacket[]] = await this.#model.query(query);
+    public async customQuery<R>(path: string[], options?: CustomQueryOptions): Promise<R[]> {
+        const { query, params } = await this.#selectQuery(path, options);
+        const [data]: [QueryResult, FieldPacket[]] = await this.#model.query(query, params);
         return data as R[];
     }
 
@@ -44,30 +61,10 @@ export default class ModelSql<T> implements IModel<T> {
         return (await this.#model.query(`SELECT * FROM ${table}`))[0] as T[];
     }
 
-    public static async createDatabase(): Promise<void> {
-        const connection = await mySqlConnection.getConnection();
-        this.#runQueries(['..', 'db', './SQL', 'create-database.sql']);
-        const data = (await connection.query('select * from customers'))[0] as [];
-        if (data.length === 0) {
-            await this.#insertData();
-        }
-    }
-
-    public static async dropTables(): Promise<void> {
-        this.#runQueries(['..', 'db', './SQL', 'drop-tables.sql']);
-    }
-
-    static async #insertData(): Promise<void> {
-        this.#runQueries(['..', 'db', './SQL', 'seeds.sql']);
-    }
-
-    static async #runQueries(path: string[]): Promise<void> {
-        const queries = await Utils.readSqlFile(path, true);
-        const connection = await mySqlConnection.getConnection();
-        for (const query of queries) {
-            if (query.trim() !== '') {
-                await connection.query(query + ";");
-            }
+    async #selectQuery(path: string[], option?: CustomQueryOptions): Promise<{ query: string, params: any[] | null }> {
+        return {
+            query: option ? option.query ? option.query : await Utils.readSqlFile(path, false) : await Utils.readSqlFile(path, false),
+            params: option ? option.bindParams ? option.bindParams : null : null
         }
     }
 }
