@@ -20,9 +20,12 @@ export default class MiddlewareFactory {
         }
     }
     public static errorHandler(error: CustomError, req: Request, res: Response, next: NextFunction) {
+        if (res.headersSent) {
+            return next(error);
+        }
         const status = error.status || 500;
         const error_code = error.error_code || 'internal_server_error';
-        const error_description = error.error_description || 'Something went wrong';
+        const error_description = error.error_description || 'Something went wrong: ' + error.message;
 
         res.status(status).json({ error_code, error_description });
     }
