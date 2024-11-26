@@ -1,12 +1,18 @@
-import express from 'express';
-import { Route } from '../types';
+import express, { NextFunction, Request, Response } from 'express';
+import { Routes } from '../utils/types';
+import { MapMessage } from '../utils/EnumError';
+import { StatusCodes } from 'http-status-codes';
+import RideController from '../layers/controller/ride.controller.';
 
 const defaultRoute = express.Router();
 
-defaultRoute.get('/', (req, res) => {
-    res.send('Hello World');
-});
+const instanceController = new RideController();
 
-const routes: Route = [defaultRoute];
+defaultRoute.patch('/ride/confirm', instanceController.getMethod('confirm'));
+defaultRoute.post('/ride/estimate', instanceController.getMethod('estimate'));
+defaultRoute.get('/ride/:customer_id', instanceController.getMethod('getRideByCustomerAndDriver'));
+
+
+const routes: Routes = [defaultRoute];
 
 export default routes;
