@@ -1,0 +1,14 @@
+.container.drivers {
+    display: flex;
+    margin-top: 20px;
+    gap: calc(var(--default-unit)*3);
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 330px;
+    padding: 30px;
+    scroll-snap-type: y mandatory;
+}
+
+.container.drivers>.card {
+    scroll-snap-align: center;
+}
