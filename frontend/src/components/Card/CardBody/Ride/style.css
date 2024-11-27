@@ -1,0 +1,31 @@
+.details.grid.flex {
+    grid-template-areas:
+        "date  date driver driver"
+        "distance distance driver driver"
+        "time time value value"
+}
+
+.details.grid.flex :nth-child(n) {
+    display: flex;
+    gap: var(--default-unit);
+}
+
+.distance {
+    grid-area: distance;
+}
+
+.time {
+    grid-area: time;
+}
+
+.value {
+    grid-area: value;
+}
+
+.date {
+    grid-area: date;
+}
+
+.driver {
+    grid-area: driver;
+}

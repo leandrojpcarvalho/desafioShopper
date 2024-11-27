@@ -1,0 +1,33 @@
+.body-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--default-unit);
+}
+
+.body-container :nth-child(n) {
+    display: flex;
+    flex-direction: column;
+    text-align: justify;
+    max-width: 400px;
+    align-items: center;
+    gap: calc(var(--default-unit)/2);
+}
+
+
+
+.body-container .header {}
+
+.body-container .main {}
+
+.body-container .footer {
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: calc(var(--default-unit) * 1.5);
+    font-weight: bold;
+}
+
+.value>span {
+    background-color: black;
+    color: #ffffff;
+}
