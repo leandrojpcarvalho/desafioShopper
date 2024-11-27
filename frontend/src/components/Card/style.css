@@ -1,0 +1,27 @@
+.card {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+
+    box-shadow: var(--shadow);
+    border-radius: var(--border-radius);
+    font-size: var(--primary-text-size);
+    padding: var(--padding);
+}
+
+.card :nth-child(n) {
+    margin: 0 auto;
+    font-size: var(--secondary-text-size);
+}
+
+.selected-driver {
+    background-color: var(--selected-bg);
+    color: var(--secondary-color);
+}
+
+.selected-driver .button {
+    background-color: var(--button-selected-bg);
+    color: var(--button-selected-color);
+}

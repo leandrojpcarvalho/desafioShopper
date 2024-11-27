@@ -1,0 +1,14 @@
+.input {
+    display: flex;
+    text-align: center;
+    gap: calc(var(--default-unit) * 2);
+    width: 100%;
+}
+
+.input>input {
+    padding: var(--default-unit);
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--shadow);
+    font-size: var(--primary-text-size);
+}

@@ -1,0 +1,39 @@
+.basic-button {
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+.button-deactive {
+    cursor: not-allowed;
+    background-color: var(--button-deactive-bg);
+    color: var(--button-deactive-color);
+    padding: var(--padding) calc(var(--padding) * 1.5);
+    border-radius: var(--border-radius);
+}
+
+.button {
+    background-color: var(--button-active-bg);
+    color: var(--button-active-color);
+    border-radius: var(--border-radius);
+    padding: var(--padding) calc(var(--padding) * 1.5);
+}
+
+.button:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--button-hover-color);
+}
+
+.button.deactive {
+    background-color: var(--button-deactive-bg);
+    color: var(--button-deactive-color);
+}
+
+.button.selected {
+    background-color: var(--button-selected-bg);
+    color: var(--button-selected-color);
+}
+
+.clean {
+    background-color: var(--button-clean-bg);
+}

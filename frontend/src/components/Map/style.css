@@ -1,0 +1,11 @@
+.map {
+    width: 550px;
+    height: 400px;
+}
+
+.map-container {
+    max-width: 550px;
+    max-height: 400px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
