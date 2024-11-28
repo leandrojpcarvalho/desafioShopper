@@ -5,7 +5,7 @@ export type Select<T, R extends keyof T> = Pick<T, R>;
 
 
 export type EstimateResponse = {
-    customer_id: number;
+    customer_id: string;
     destination: LatLocation;
     origin: LatLocation;
     distance: number;
@@ -53,7 +53,7 @@ export type Driver = {
 }
 
 export type EstimateRequestType = {
-    customer_id: number;
+    customer_id: string;
     origin: string;
     destination: string;
 }
@@ -61,7 +61,7 @@ export type EstimateRequestType = {
 
 export type ConfirmRideType = {
     driver: Select<Driver, 'id' | 'name'>;
-    customer_id: number;
+    customer_id: string;
     destination: string;
     origin: string;
     distance: number;

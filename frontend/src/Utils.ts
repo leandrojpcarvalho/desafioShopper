@@ -18,7 +18,7 @@ interface FetchOptions {
     method: keyof typeof Method;
     body?: EstimateRequestType | ConfirmRideType;
     bind?: {
-        customer_id: number;
+        customer_id: string;
         driver_id: string;
     }
 }
@@ -40,7 +40,7 @@ export abstract class RequestFactory {
         });
     }
 
-    private static urlMaker(endPoints: keyof typeof EndPoints, bind?: { customer_id: number, driver_id: string }) {
+    private static urlMaker(endPoints: keyof typeof EndPoints, bind?: { customer_id: string, driver_id: string }) {
         let url = this.baseUrl;
         if (bind) {
             url += `${EndPoints[endPoints]}/${bind.customer_id}${bind.driver_id ? `?driver_id=${bind.driver_id}` : ''}`;
@@ -66,7 +66,7 @@ export abstract class RequestFactory {
         return this.request({ method: 'PATCH', endPoints: 'RIDE_CONFIRM', body });
     }
 
-    public static findHistory(customer_id: number) {
+    public static findHistory(customer_id: string) {
         return this.request({ method: 'GET', endPoints: 'RIDE', bind: { customer_id, driver_id: '' } });
     }
 }

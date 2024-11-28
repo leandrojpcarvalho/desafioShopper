@@ -1,0 +1,29 @@
+.carrosel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.carrosel-container .button {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10px;
+    height: 100%;
+    background-color: transparent;
+}
+
+.carrosel-container .button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 100%;
+}

@@ -5,8 +5,8 @@ import './MainView.css';
 import React, { useState } from 'react';
 
 const menuMap = {
-    "Solicitaçao de Viagem": "/ride/1",
-    "Historico de Viagens": "/history",
+    "Solicitaçao de Viagem": "/ride",
+    "Historico de Viagens": "/history/1",
     "Moobe": ""
 }
 

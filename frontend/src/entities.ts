@@ -44,7 +44,7 @@ export default abstract class ValidateFields {
 
 
 class EstimateRequest implements EstimateRequestType, IMethods<EstimateRequestType> {
-    customer_id: number;
+    customer_id: string;
     origin: string;
     destination: string;
 
@@ -81,7 +81,7 @@ class EstimateRequest implements EstimateRequestType, IMethods<EstimateRequestTy
 
 class ConfirmRide implements ConfirmRideType, IMethods<ConfirmRideType> {
     driver: Select<Driver, "id" | "name">;
-    customer_id: number;
+    customer_id: string;
     destination: string;
     origin: string;
     distance: number;

@@ -74,7 +74,7 @@ export default function RequestView() {
 
     const getDrivers = () => {
         try {
-            fetch(RequestFactory.getRideEstimate({ customer_id: parseInt(customer_id), origin, destination }))
+            fetch(RequestFactory.getRideEstimate({ customer_id: customer_id, origin, destination }))
                 .then(response => response.json())
                 .then(data => {
                     setData(data)
@@ -101,12 +101,11 @@ export default function RequestView() {
             if (!selectedDriverId) {
                 throw new Error('Selecione um motorista')
             }
-            console.log(data.options, selectedDriverId)
             const driver = data.options.find(driver => driver.id === selectedDriverId)
             if (!driver) {
                 throw new Error('Motorista não encontrado')
             }
-            fetch(RequestFactory.confirmRide({ customer_id: parseInt(customer_id), origin, destination, driver, distance: data.distance, duration: data.duration, value: parseFloat(driver.value.toFixed(2)) }))
+            fetch(RequestFactory.confirmRide({ customer_id: customer_id, origin, destination, driver, distance: data.distance, duration: data.duration, value: parseFloat(driver.value.toFixed(2)) }))
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
