@@ -12,12 +12,8 @@ export default class CustomerService implements IService<ICustomerDB> {
     constructor(model: IModelBack<ICustomerDB> = new CustomerModel()) {
         this.model = model;
     }
-    public async update(id: number, data: Partial<ICustomerDB>) {
-        const response = await this.model.update(id, data);
-        if (!response) throw new CustomError('INVALID_DATA', 'Customer not found');
-        return { status: StatusCodes.OK, data: response };
-    }
-    public async findById(id: number): Promise<{ status: number; data: ICustomerDB }> {
+
+    public async findById(id: string): Promise<{ status: number; data: ICustomerDB }> {
         const response = await this.model.findById(id);
         if (!response) throw new CustomError('INVALID_DATA', 'Customer not found');
         return { status: StatusCodes.OK, data: response };

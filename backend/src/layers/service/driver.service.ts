@@ -16,12 +16,8 @@ export default class DriverService implements IDriverService {
     constructor(model: IModelBack<IDriverDB> = new DriverModel()) {
         this.model = model;
     }
-    public async update(id: number, data: Partial<IDriverDB>) {
-        const response = await this.model.update(id, data);
-        if (!response) throw new CustomError('DRIVER_NOT_FOUND', 'Driver not found');
-        return { status: StatusCodeBackend.SUCCESS, data: response };
-    }
-    public async findById(id: number) {
+
+    public async findById(id: string) {
         const response = await this.model.findById(id);
         if (!response) throw new CustomError('DRIVER_NOT_FOUND', 'Driver not found');
         return { status: StatusCodeBackend.SUCCESS, data: response };
