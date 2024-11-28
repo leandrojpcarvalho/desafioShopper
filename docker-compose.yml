@@ -5,10 +5,12 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./frontend:/app
+      - ./frontend:/frontend
     environment:
       - VITE_BASE_URL=http://localhost:3333
       - VITE_ROUTE_PUT=false
+    env_file:
+      - .env
     depends_on:
       - backend
   backend:
