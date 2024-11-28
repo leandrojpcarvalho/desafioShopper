@@ -8,6 +8,7 @@ export enum StatusCodeBackend {
     'INTERNAL_SERVER_ERROR' = 500,
     'GOOGLE_API_ERROR' = 404,
     'CREATION_FAILED' = 400,
+    'NO_DRIVERS_FOUND' = 404,
 }
 
 export enum MapMessage {
@@ -20,4 +21,5 @@ export enum MapMessage {
     'INTERNAL_SERVER_ERROR' = 'Erro interno do servidor',
     'GOOGLE_API_ERROR' = 'Erro na API do Google',
     'CREATION_FAILED' = 'Falha ao criar registro',
+    'NO_DRIVERS_FOUND' = 'Nenhum motorista disponivel encontrado',
 }
