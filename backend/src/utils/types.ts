@@ -55,7 +55,7 @@ export type Legs = [{
 
 export type RoutesGoogle = {
     duration: string;
-    distanceMeters: string;
+    distanceMeters: number;
     polyline: {
         encodedPolyline: string;
     };

@@ -12,12 +12,7 @@ export default class CustomerModel implements IModelBack<ICustomerDB> {
         this.model = model;
     }
 
-    public async update(id: number, data: Partial<ICustomerDB>): Promise<ICustomerDB | null> {
-        const updatedData = await this.model.update(id, data, 'customers');
-        return updatedData;
-    }
-
-    public async findById(id: number): Promise<ICustomerDB | null> {
+    public async findById(id: string): Promise<ICustomerDB | null> {
         const customer = await this.model.findById(id, 'customers');
         return customer;
     }

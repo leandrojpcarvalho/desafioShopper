@@ -4,21 +4,19 @@ import allSchemas from "./schema";
 import CustomError from "../../entities/CustomError";
 
 export default class MiddlewareFactory {
-    #schemas: { [key: string]: Joi.ObjectSchema };
+    static #schemas: { [key: string]: Joi.ObjectSchema } = allSchemas;
 
-    constructor(schemas = allSchemas) {
-        this.#schemas = schemas;
-    }
 
-    validade(schema: keyof typeof allSchemas) {
+    static validade(schema: keyof typeof allSchemas) {
         return (req: Request, res: Response, next: NextFunction) => {
             const { error } = this.#schemas[schema].validate(req.body);
             if (error) {
-                return res.status(400).json({ error: error.message });
+                res.status(400).json({ error: error.message });
             }
             next();
         }
     }
+
     public static errorHandler(error: CustomError, req: Request, res: Response, next: NextFunction) {
         if (res.headersSent) {
             return next(error);

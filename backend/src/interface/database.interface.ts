@@ -21,7 +21,7 @@ export interface IDriverCalculate extends IDriverDB {
 
 export interface IRideDB {
     id: number;
-    customer_id: number;
+    customer_id: string;
     driver_id: number;
     origin: string;
     destination: string;
@@ -32,14 +32,14 @@ export interface IRideDB {
 }
 
 export interface ICustomerDB {
-    id: number;
+    id: string;
 }
 
 export interface IReviewDB {
     id: number;
     ride_id: number;
     driver_id: number;
-    customer_id: number;
+    customer_id: string;
     comment: string;
     rating: number;
 }

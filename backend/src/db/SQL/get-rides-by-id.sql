@@ -3,4 +3,4 @@ FROM rides AS R
     INNER JOIN drivers AS D ON R.driver_id = D.id
 WHERE
     R.customer_id = ?
-ORDER BY R.date ASC;
+ORDER BY R.date DESC;

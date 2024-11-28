@@ -4,7 +4,7 @@ import IModel from "../../interface/model.interface";
 import IModelBack from "../../interface/modelBack.interteface";
 import { CustomQueryOptions } from "../../utils/types";
 
-export interface IReviewModel extends IModel<IReviewDB> {
+export interface IReviewModel extends IModelBack<IReviewDB> {
     findReviewByDriverId(driverId: number): Promise<IReviewDB[]>;
 }
 
@@ -15,30 +15,11 @@ export default class ReviewModel implements IReviewModel {
     constructor(model: IModel<IReviewDB> = new ModelSql<IReviewDB>()) {
         this.model = model;
     }
-
-    public async customQuery<R>(path: string[], options?: CustomQueryOptions): Promise<R[]> {
-        const reviews = this.model.customQuery<R>(path, options);
-        return reviews;
+    public findByCustomQuery(options: CustomQueryOptions): Promise<IReviewDB[]> {
+        return this.model.customQuery([''], options);
     }
 
-    public async findAll(table: keyof IDatabase): Promise<IReviewDB[]> {
-        return this.model.findAll('reviews');
-    }
-
-    public async create(data: IReviewDB) {
-        return this.model.create(data, 'reviews');
-    }
-
-    public async delete(id: number): Promise<boolean> {
-        return this.model.delete(id, 'reviews');
-    }
-
-    public async update(id: number, data: Partial<IReviewDB>) {
-        const updatedData = this.model.update(id, data, 'reviews');
-        return updatedData;
-    }
-
-    public async findById(id: number) {
+    public async findById(id: string) {
         const review = await this.model.findById(id, 'reviews');
         return review;
     }

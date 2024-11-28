@@ -1,7 +1,7 @@
 import { createPool, Pool } from "mysql2/promise";
 import Utils from "../utils";
 
-export default class DBManagenament {
+export default class DatabaseManager {
     private static mySqlConnection: Pool = createPool({
         host: process.env.DB_HOST || 'localhost',
         user: process.env.DB_USER || 'root',
@@ -27,21 +27,26 @@ export default class DBManagenament {
     }
 
     public static async dropTables(): Promise<void> {
-        this.#runQueries(['drop-tables.sql']);
+        const tables = await this.#runQueries(['get-db-schema.sql']);
+        if (tables[0][0].length > 0) {
+            await this.#runQueries(['drop-tables.sql']);
+        }
     }
 
     static async #insertData(): Promise<void> {
         this.#runQueries(['seeds.sql']);
     }
 
-    static async #runQueries(path: string[]): Promise<void> {
+    static async #runQueries(path: string[]): Promise<any[]> {
         const queries = await Utils.readSqlFile(path, true);
         const connection = await this.mySqlConnection.getConnection();
+        let result = [];
         for (const query of queries) {
             if (query.trim() !== '') {
-                await connection.query(query + ";");
+                result.push(await connection.query(query + ";"));
             }
         }
+        return result;
     }
 
 }

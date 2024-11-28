@@ -3,17 +3,17 @@ import IModel from "../interface/model.interface";
 import Utils from "../utils";
 import { IDatabase } from "../interface/database.interface";
 import { CustomQueryOptions } from "../utils/types";
-import DBManagenament from "./config";
+import DatabaseManager from "./config";
 import CustomError from "../entities/CustomError";
 
 export default class ModelSql<T extends Object> implements IModel<T> {
     #model: Pool;
 
-    constructor(model: Pool = DBManagenament.getConnection()) {
+    constructor(model: Pool = DatabaseManager.getConnection()) {
         this.#model = model;
     }
 
-    public async findById(id: number, table: keyof IDatabase): Promise<T | null> {
+    public async findById(id: string, table: keyof IDatabase): Promise<T | null> {
         const [[data]]: [RowDataPacket[], FieldPacket[]] = (await this.#model.query(`SELECT * FROM ${table} WHERE id = ?`, [id]));
         return data ? data as T : null;
     }
@@ -41,7 +41,7 @@ export default class ModelSql<T extends Object> implements IModel<T> {
     public async update(id: number, data: T, table: keyof IDatabase): Promise<T | null> {
         if (table !== 'customers') {
             await this.#model.query(`UPDATE ${table} SET ? WHERE id = ?`, [data, id]);
-            return this.findById(id, table);
+            return this.findById(String(id), table);
         }
         return null;
     }

@@ -33,11 +33,11 @@ export default class RideController {
             return;
         }
         if (!driver_id) {
-            const { status, data } = await this.rideService.getRidesByCustomer(parseInt(customer_id));
+            const { status, data } = await this.rideService.getRidesByCustomer(customer_id);
             res.status(status).send(data);
             return;
         }
-        const { status, data } = await this.rideService.getRidesByCustomerAndDriver(parseInt(customer_id), parseInt(driver_id.toString()));
+        const { status, data } = await this.rideService.getRidesByCustomerAndDriver(customer_id, parseInt(driver_id.toString()));
         res.status(status).send(data);
     }
 

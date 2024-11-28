@@ -13,12 +13,7 @@ export default class DriverModel implements IModelBack<IDriverDB> {
         this.model = model;
     }
 
-    public async update(id: number, data: Partial<IDriverDB>): Promise<IDriverDB | null> {
-        const updatedData = await this.model.update(id, data, 'drivers');
-        return updatedData;
-    }
-
-    public async findById(id: number): Promise<IDriverDB | null> {
+    public async findById(id: string): Promise<IDriverDB | null> {
         const driver = await this.model.findById(id, 'drivers');
         return driver;
     }

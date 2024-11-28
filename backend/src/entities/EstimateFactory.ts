@@ -1,12 +1,12 @@
 import instanceServiceGoogle, { GoogleService } from "../APIGoogle/service/index.service";
 import { IDriverDB, IReviewDB } from "../interface/database.interface";
 import IEstimateRequest, { IEstimateResponse, LatLocation } from "../interface/estimate.interface";
-import { DriverCalculated, GoogleResponse, RideConfirmRequest } from "../utils/types";
+import { DriverBestReview, DriverCalculated, GoogleResponse, RideConfirmRequest } from "../utils/types";
 import CustomError from "./CustomError";
 
 
 export default class EstimateResponseFactory {
-    private static instancesEstimateResponse: Map<number, EstimateResponseClass> = new Map();
+    private static instancesEstimateResponse: Map<string, EstimateResponseClass> = new Map();
     private static serviceGoogle = instanceServiceGoogle;
 
     public static async createEstimateResponse(body: IEstimateRequest): Promise<EstimateResponseClass> {
@@ -15,10 +15,11 @@ export default class EstimateResponseFactory {
             throw new CustomError('GOOGLE_API_ERROR', response.error.details.join('; '));
         }
         const instance = new EstimateResponseClass(body.customer_id, response, body);
+        console.log(instance);
         this.instancesEstimateResponse.set(body.customer_id, instance);
         return instance;
     }
-    public static confirmEstimateResponse(customer_id: number, confirmationRequest: RideConfirmRequest): boolean {
+    public static confirmEstimateResponse(customer_id: string, confirmationRequest: RideConfirmRequest): boolean {
         const instance = this.instancesEstimateResponse.get(customer_id);
         if (!instance) throw new CustomError('INVALID_DATA', 'Estimate not found');
         if (instance.isValid(confirmationRequest)) {
@@ -35,7 +36,7 @@ interface EstimateResponseMethods {
 }
 
 export class EstimateResponseClass implements EstimateResponseClass, EstimateResponseMethods {
-    customer_id: number;
+    customer_id: string;
     initialRequest: IEstimateRequest;
     destination: LatLocation;
     origin: LatLocation;
@@ -44,12 +45,12 @@ export class EstimateResponseClass implements EstimateResponseClass, EstimateRes
     options: DriverCalculated[];
     mappedBestReviews: Map<number, IReviewDB> = new Map();
     routeResponse: GoogleResponse;
-    constructor(id: number, responseGoogle: GoogleResponse, initialRequest: IEstimateRequest) {
+    constructor(id: string, responseGoogle: GoogleResponse, initialRequest: IEstimateRequest) {
         this.customer_id = id;
         this.routeResponse = responseGoogle;
         this.destination = responseGoogle.routes[0].legs[0].endLocation.latLng;
         this.origin = responseGoogle.routes[0].legs[0].startLocation.latLng;
-        this.distance = parseInt(responseGoogle.routes[0].distanceMeters, 10);
+        this.distance = responseGoogle.routes[0].distanceMeters;
         this.duration = responseGoogle.routes[0].duration;
         this.initialRequest = initialRequest;
         this.options = [];
@@ -73,17 +74,26 @@ export class EstimateResponseClass implements EstimateResponseClass, EstimateRes
     }
 
     private adaptDriverToCalculetedDriver({ min_order, tax, id, ...rest }: IDriverDB, reviews: IReviewDB[]): DriverCalculated {
-        this.mapReviews(reviews);
+        if (reviews && reviews.length !== 0) {
+            console.log(reviews.length, 'reviews');
+            this.mapReviews(reviews);
+        }
+        const data = this.mappedBestReviews.get(id) ?? { rating: 0, comment: '' };
+
         return {
             ...rest,
             id,
-            review: this.mappedBestReviews.get(id) ?? { rating: 0, comment: '' },
-            value: (this.distance / 1000) * tax,
+            review: {
+                rating: data.rating,
+                comment: data.comment
+            },
+            value: parseFloat(((this.distance / 1000) * tax).toFixed(2)),
         }
     }
 
     private mapReviews(reviews: IReviewDB[]) {
         reviews.forEach(review => {
+            if (!review) return;
             const bestReview = this.mappedBestReviews.get(review.driver_id);
             if (!bestReview) {
                 this.mappedBestReviews.set(review.driver_id, review);
