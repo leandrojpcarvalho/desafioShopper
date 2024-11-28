@@ -1,7 +1,7 @@
 import express from 'express';
 import MiddlewareFactory from './layers/middleware/Middleware';
 import { Routes } from './utils/types';
-import DBManagenament from './db/config';
+import DatabaseManager from './db/config';
 
 export default class Application {
     #app: express.Express;
@@ -23,23 +23,22 @@ export default class Application {
         const accessControl: express.RequestHandler = (req, res, next) => {
             res.header('Access-Control-Allow-Origin', '*');
             res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-            res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+            res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH');
             next();
         }
         this.#app.use(express.json());
         this.#app.use(accessControl);
     }
 
-    start(port: number, dataBase: 'start' | 'clear' = 'start'): void {
+    async start(port: number, dataBase: 'start' | 'clear' = 'start') {
         this.#app.listen(port, () => {
             console.log(`Server is running on port ${port}`);
         });
         if (dataBase === 'start') {
-            DBManagenament.createDatabase();
+            DatabaseManager.createDatabase();
         } else {
-            DBManagenament.dropTables();
-            DBManagenament.createDatabase();
+            await DatabaseManager.dropTables();
+            await DatabaseManager.createDatabase();
         }
-
     }
 }
