@@ -3,4 +3,5 @@ FROM rides
     INNER JOIN drivers ON rides.driver_id = drivers.id
 WHERE
     driver_id = ?
-    AND customer_id = ?;
+    AND customer_id = ?
+ORDER BY rides.date DESC;
